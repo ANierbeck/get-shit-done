@@ -1,0 +1,40 @@
+name = "gsd:new-project"
+description = "Initialize new project with brief and configuration"
+
+[metadata]
+source_md = "../commands/gsd/new-project.md"
+workflow_md = "../get-shit-done/workflows/new-project.md"
+template_md = "../get-shit-done/templates/project.md"
+command_type = "interactive_workflow"
+maintenance_level = "core"
+
+[parameters]
+mode = { type = "string", required = false, description = "Workflow mode (interactive or yolo)" }
+
+[prompt]
+system = """
+You are Get Shit Done operating within Mistral Vibe.
+Guide the user through project initialization using the new-project workflow.
+"""
+
+user = """
+Initialize a new project:
+1. Follow the workflow in {{workflow_md}}
+2. Use the template from {{template_md}}
+3. Ask clarifying questions as needed
+4. Create PROJECT.md with captured requirements
+5. Create config.json with workflow preferences
+6. If mode is specified, use it; otherwise ask user
+"""
+
+[execution]
+tools_required = ["read_file", "write_file", "bash"]
+context_files = [
+    "{{source_md}}",
+    "{{workflow_md}}",
+    "{{template_md}}"
+]
+output_files = [
+    ".planning/PROJECT.md",
+    ".planning/config.json"
+]

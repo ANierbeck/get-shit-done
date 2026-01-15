@@ -1,0 +1,18 @@
+[commands]
+help = { md_path = "../commands/gsd/help.md", type = "reference" }
+progress = { md_path = "../commands/gsd/progress.md", type = "workflow" }
+new-project = { md_path = "../commands/gsd/new-project.md", type = "interactive_workflow" }
+plan-phase = { md_path = "../commands/gsd/plan-phase.md", type = "complex_workflow" }
+execute-plan = { md_path = "../commands/gsd/execute-plan.md", type = "execution_workflow" }
+add-todo = { md_path = "../commands/gsd/add-todo.md", type = "utility" }
+debug = { md_path = "../commands/gsd/debug.md", type = "interactive_utility" }
+
+[settings]
+default_context = [".planning/STATE.md", ".planning/ROADMAP.md", ".planning/PROJECT.md"]
+tool_mapping = {
+    "read_file" = "vibe_read_file",
+    "write_file" = "vibe_write_file",
+    "bash" = "vibe_bash",
+    "todo" = "vibe_todo",
+    "Task" = "vibe_task"
+}

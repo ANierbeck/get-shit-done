@@ -1,0 +1,53 @@
+commands:
+  help:
+    md_source: "../commands/gsd/help.md"
+    toml_target: "vibe-commands/gsd/help.toml"
+    type: "reference"
+    dependencies: []
+
+  progress:
+    md_source: "../commands/gsd/progress.md"
+    toml_target: "vibe-commands/gsd/progress.toml"
+    type: "workflow"
+    dependencies: ["../get-shit-done/workflows/progress.md"]
+
+  new-project:
+    md_source: "../commands/gsd/new-project.md"
+    toml_target: "vibe-commands/gsd/new-project.toml"
+    type: "interactive_workflow"
+    dependencies: [
+      "../get-shit-done/workflows/new-project.md",
+      "../get-shit-done/templates/project.md"
+    ]
+
+  plan-phase:
+    md_source: "../commands/gsd/plan-phase.md"
+    toml_target: "vibe-commands/gsd/plan-phase.toml"
+    type: "complex_workflow"
+    dependencies: [
+      "../get-shit-done/workflows/plan-phase.md",
+      "../get-shit-done/references/plan-format.md",
+      "../get-shit-done/references/scope-estimation.md",
+      "../get-shit-done/references/checkpoints.md"
+    ]
+
+  execute-plan:
+    md_source: "../commands/gsd/execute-plan.md"
+    toml_target: "vibe-commands/gsd/execute-plan.toml"
+    type: "execution_workflow"
+    dependencies: [
+      "../get-shit-done/workflows/execute-plan.md",
+      "../get-shit-done/templates/summary.md"
+    ]
+
+  add-todo:
+    md_source: "../commands/gsd/add-todo.md"
+    toml_target: "vibe-commands/gsd/add-todo.toml"
+    type: "utility"
+    dependencies: []
+
+  debug:
+    md_source: "../commands/gsd/debug.md"
+    toml_target: "vibe-commands/gsd/debug.toml"
+    type: "interactive_utility"
+    dependencies: ["../get-shit-done/workflows/debug.md"]

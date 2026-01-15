@@ -59,6 +59,85 @@ That's what this is. No enterprise roleplay bullshit. Just an incredibly effecti
 
 Vibecoding has a bad reputation. You describe what you want, AI generates code, and you get inconsistent garbage that falls apart at scale.
 
+## 🌐 Multi-Platform Support
+
+Get Shit Done now supports multiple AI platforms with a **unified installer**!
+
+### Supported Platforms
+
+| Platform | Command | Description |
+|----------|---------|-------------|
+| **Claude Code** | `--claude` | Anthropic's AI with Code Interpreter |
+| **Mistral Vibe** | `--vibe` | Mistral AI with Vibe agent framework |
+
+### Unified Installation
+
+```bash
+# Install for Claude Code (default)
+npx get-shit-done-cc --claude --global
+
+# Install for Mistral Vibe
+npx get-shit-done-cc --vibe --global
+
+# Install locally for current project
+npx get-shit-done-cc --vibe --local
+```
+
+### Backward Compatibility
+
+The old installation methods still work:
+
+```bash
+# Old Claude installation (still works)
+npx get-shit-done-cc --global
+
+# Old Vibe installation (still works)
+npx get-shit-done-cc --vibe --global
+```
+
+### Platform-Specific Configuration
+
+```bash
+# Custom directories
+npx get-shit-done-cc --claude --global --claude-dir ~/.custom-claude
+npx get-shit-done-cc --vibe --global --vibe-dir ~/.custom-vibe
+
+# Environment variables
+CLAUDE_CONFIG_DIR=~/.custom-claude npx get-shit-done-cc --claude --global
+VIBE_CONFIG_DIR=~/.custom-vibe npx get-shit-done-cc --vibe --global
+```
+
+## 🎯 Benefits of Unified Installer
+
+1. **Single Entry Point**: One installer for all platforms
+2. **Consistent Interface**: Same options and behavior across platforms
+3. **Easy Discovery**: Clear platform selection prompts
+4. **Future-Proof**: Easy to add new AI platforms
+5. **Backward Compatible**: Existing installations continue to work
+
+## 🚀 Mistral Vibe Support
+
+Get Shit Done now supports **Mistral Vibe** with TOML-based commands!
+
+### Installation
+
+```bash
+# Install for Mistral Vibe
+npx get-shit-done-cc --vibe --global
+```
+
+### Usage
+
+All GSD commands are available in Mistral Vibe using the same `/gsd:*` syntax:
+
+```
+/gsd:help          # Show command reference
+/gsd:new-project   # Initialize new project
+/gsd:progress      # Check project status
+```
+
+See [vibe-commands/INSTALLATION.md](vibe-commands/INSTALLATION.md) for detailed installation instructions.
+
 GSD fixes that. It's the context engineering layer that makes Claude Code reliable. Describe your idea, let the system extract everything it needs to know, and let Claude Code get to work.
 
 ---
@@ -71,11 +150,21 @@ People who want to describe what they want and have it built correctly — witho
 
 ## Getting Started
 
+### For Claude Code
+
 ```bash
 npx get-shit-done-cc
 ```
 
 That's it. Verify with `/gsd:help` inside your Claude Code interface.
+
+### For Mistral Vibe
+
+```bash
+npx get-shit-done-cc --vibe --global
+```
+
+Verify with `/gsd:help` inside your Mistral Vibe interface.
 
 <details>
 <summary><strong>Non-interactive Install (Docker, CI, Scripts)</strong></summary>

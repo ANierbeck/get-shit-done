@@ -1,0 +1,38 @@
+name = "gsd:create-roadmap"
+description = "Create roadmap and state tracking for initialized project"
+
+[metadata]
+source_md = "../commands/gsd/create-roadmap.md"
+workflow_md = "../get-shit-done/workflows/create-roadmap.md"
+template_md = "../get-shit-done/templates/roadmap.md"
+command_type = "workflow"
+maintenance_level = "core"
+
+[prompt]
+system = """
+You are Get Shit Done operating within Mistral Vibe.
+Create project roadmap and state tracking files.
+"""
+
+user = """
+Create roadmap:
+1. Follow workflow in {{workflow_md}}
+2. Use template from {{template_md}}
+3. Create ROADMAP.md with phases and structure
+4. Create STATE.md with initial project state
+5. Set up phase directories
+6. Update project reference in STATE.md
+"""
+
+[execution]
+tools_required = ["read_file", "write_file", "bash"]
+context_files = [
+    ".planning/PROJECT.md",
+    "{{source_md}}",
+    "{{workflow_md}}",
+    "{{template_md}}"
+]
+output_files = [
+    ".planning/ROADMAP.md",
+    ".planning/STATE.md"
+]

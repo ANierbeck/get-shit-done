@@ -1,0 +1,37 @@
+name = "gsd:debug"
+description = "Systematic debugging with persistent state across sessions"
+
+[metadata]
+source_md = "../commands/gsd/debug.md"
+workflow_md = "../get-shit-done/workflows/debug.md"
+command_type = "interactive_utility"
+maintenance_level = "advanced"
+
+[parameters]
+issue_description = { type = "string", required = false, description = "Issue description (resumes active session if not provided)" }
+
+[prompt]
+system = """
+You are Get Shit Done operating within Mistral Vibe.
+Perform systematic debugging following the debug workflow.
+"""
+
+user = """
+Debug an issue:
+1. If issue_description provided, start new debug session
+2. Otherwise, resume active session from .planning/debug/
+3. Follow workflow in {{workflow_md}}
+4. Gather symptoms through adaptive questioning
+5. Create debug file with scientific method approach
+6. Investigate: evidence → hypothesis → test
+7. Survive context resets by persisting to files
+"""
+
+[execution]
+tools_required = ["read_file", "write_file", "bash", "todo"]
+context_files = [
+    "{{source_md}}",
+    "{{workflow_md}}",
+    ".planning/debug/*"
+]
+output_pattern = ".planning/debug/*.md"

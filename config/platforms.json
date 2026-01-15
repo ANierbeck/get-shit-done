@@ -1,0 +1,36 @@
+{
+  "platforms": {
+    "claude": {
+      "name": "Claude Code",
+      "description": "Anthropic's Claude AI with Code Interpreter",
+      "defaultConfigDir": "~/.claude",
+      "envVar": "CLAUDE_CONFIG_DIR",
+      "commandPrefix": "/gsd:",
+      "commandFormat": "md",
+      "commandDir": "commands/gsd",
+      "skillsDir": "get-shit-done",
+      "supportedSince": "1.0.0"
+    },
+    "vibe": {
+      "name": "Mistral Vibe",
+      "description": "Mistral AI with Vibe agent framework",
+      "defaultConfigDir": "~/.vibe",
+      "envVar": "VIBE_CONFIG_DIR",
+      "commandPrefix": "/gsd:",
+      "commandFormat": "toml",
+      "commandDir": "vibe-commands/gsd",
+      "skillsDir": "get-shit-done",
+      "supportedSince": "1.4.18"
+    }
+  },
+  "defaultPlatform": "claude",
+  "installation": {
+    "global": {
+      "description": "Available in all projects",
+      "default": true
+    },
+    "local": {
+      "description": "Project-specific installation"
+    }
+  }
+}

@@ -1,14 +1,17 @@
 {
   "name": "get-shit-done-cc",
-  "version": "1.4.17",
+  "version": "1.4.18",
   "description": "A meta-prompting, context engineering and spec-driven development system for Claude Code by TÂCHES.",
   "bin": {
-    "get-shit-done-cc": "bin/install.js"
+    "get-shit-done-cc": "bin/install.js",
+    "get-shit-done-claude": "bin/install.js",
+    "get-shit-done-vibe": "bin/install.js"
   },
   "files": [
     "bin",
     "commands",
-    "get-shit-done"
+    "get-shit-done",
+    "vibe-commands"
   ],
   "keywords": [
     "claude",
@@ -16,7 +19,11 @@
     "ai",
     "meta-prompting",
     "context-engineering",
-    "spec-driven-development"
+    "spec-driven-development",
+    "mistral",
+    "vibe",
+    "unified",
+    "multi-platform"
   ],
   "author": "TÂCHES",
   "license": "MIT",

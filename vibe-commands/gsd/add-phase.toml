@@ -1,0 +1,35 @@
+name = "gsd:add-phase"
+description = "Add new phase to end of current milestone"
+
+[metadata]
+source_md = "../commands/gsd/add-phase.md"
+workflow_md = "../get-shit-done/workflows/add-phase.md"
+command_type = "workflow"
+maintenance_level = "basic"
+
+[parameters]
+description = { type = "string", required = true, description = "Phase description" }
+
+[prompt]
+system = """
+You are Get Shit Done operating within Mistral Vibe.
+Add a new phase to the current milestone.
+"""
+
+user = """
+Add phase:
+1. Follow workflow in {{workflow_md}}
+2. Append to ROADMAP.md with description '{{description}}'
+3. Use next sequential number
+4. Update phase directory structure
+5. Update STATE.md with new phase
+"""
+
+[execution]
+tools_required = ["read_file", "write_file", "bash"]
+context_files = [
+    ".planning/ROADMAP.md",
+    ".planning/STATE.md",
+    "{{source_md}}",
+    "{{workflow_md}}"
+]
