@@ -1,0 +1,16 @@
+[command]
+name = "gsd:debug"
+aliases = ["/gsd:debug", "/gsd:d"]
+description = "Systematic debugging with persistent state across sessions"
+type = "prompt"
+template = '''You are Get Shit Done operating within Mistral Vibe.
+Perform systematic debugging following the debug workflow.
+
+Debug an issue:
+1. If issue_description provided, start new debug session
+2. Otherwise, resume active session from .planning/debug/
+3. Follow workflow in get-shit-done/workflows/debug.md
+4. Gather symptoms through adaptive questioning
+5. Create debug file with scientific method approach
+6. Investigate: evidence → hypothesis → test
+7. Survive context resets by persisting to files'''

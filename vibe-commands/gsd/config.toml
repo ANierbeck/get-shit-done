@@ -1,11 +1,15 @@
 [commands]
-help = { md_path = "../commands/gsd/help.md", type = "reference" }
-progress = { md_path = "../commands/gsd/progress.md", type = "workflow" }
-new-project = { md_path = "../commands/gsd/new-project.md", type = "interactive_workflow" }
-plan-phase = { md_path = "../commands/gsd/plan-phase.md", type = "complex_workflow" }
-execute-plan = { md_path = "../commands/gsd/execute-plan.md", type = "execution_workflow" }
-add-todo = { md_path = "../commands/gsd/add-todo.md", type = "utility" }
-debug = { md_path = "../commands/gsd/debug.md", type = "interactive_utility" }
+help = { md_path = "commands/gsd/help.md", type = "reference" }
+progress = { md_path = "commands/gsd/progress.md", type = "workflow" }
+new-project = { md_path = "commands/gsd/new-project.md", type = "interactive_workflow" }
+plan-phase = { md_path = "commands/gsd/plan-phase.md", type = "complex_workflow" }
+execute-plan = { md_path = "commands/gsd/execute-plan.md", type = "execution_workflow" }
+add-todo = { md_path = "commands/gsd/add-todo.md", type = "utility" }
+debug = { md_path = "commands/gsd/debug.md", type = "interactive_utility" }
+add-phase = { md_path = "commands/gsd/add-phase.md", type = "workflow" }
+create-roadmap = { md_path = "commands/gsd/create-roadmap.md", type = "workflow" }
+map-codebase = { md_path = "commands/gsd/map-codebase.md", type = "complex_workflow" }
+complete-milestone = { md_path = "commands/gsd/complete-milestone.md", type = "complex_workflow" }
 
 [settings]
 default_context = [".planning/STATE.md", ".planning/ROADMAP.md", ".planning/PROJECT.md"]

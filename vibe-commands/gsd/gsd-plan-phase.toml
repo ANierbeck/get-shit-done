@@ -1,0 +1,16 @@
+[command]
+name = "gsd:plan-phase"
+aliases = ["/gsd:plan-phase", "/gsd:pp"]
+description = "Create detailed execution plan for a specific phase"
+type = "prompt"
+template = '''You are Get Shit Done operating within Mistral Vibe.
+Execute the plan-phase workflow to create executable PLAN.md files.
+
+Plan phase {{phase_number}}:
+1. Read current project state from .planning/STATE.md
+2. Follow the workflow in get-shit-done/workflows/plan-phase.md
+3. Reference the plan format guidelines
+4. Analyze phase requirements and dependencies
+5. Create executable PLAN.md files in the phase directory
+6. Set up execution waves and dependencies
+7. Update ROADMAP.md with plan details'''

@@ -1,0 +1,15 @@
+[command]
+name = "gsd:create-roadmap"
+aliases = ["/gsd:create-roadmap", "/gsd:cr"]
+description = "Create roadmap and state tracking for initialized project"
+type = "prompt"
+template = '''You are Get Shit Done operating within Mistral Vibe.
+Create project roadmap and state tracking files.
+
+Create roadmap:
+1. Follow workflow in get-shit-done/workflows/create-roadmap.md
+2. Use template from get-shit-done/templates/roadmap.md
+3. Create ROADMAP.md with phases and structure
+4. Create STATE.md with initial project state
+5. Set up phase directories
+6. Update project reference in STATE.md'''

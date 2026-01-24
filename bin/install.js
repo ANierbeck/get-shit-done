@@ -16,6 +16,55 @@ const reset = '\x1b[0m';
 // Get version from package.json
 const pkg = require('../package.json');
 
+// Load command configuration
+let commandConfig = {};
+try {
+  const configPath = path.join(__dirname, '..', 'vibe-commands', 'gsd', 'config.toml');
+  if (fs.existsSync(configPath)) {
+    // Simple TOML parser for our specific format
+    const configContent = fs.readFileSync(configPath, 'utf8');
+    const config = {};
+    
+    // Parse the config.toml file
+    const lines = configContent.split('\n');
+    let currentSection = null;
+    
+    lines.forEach(line => {
+      // Skip comments and empty lines
+      if (line.trim().startsWith('#') || !line.trim()) return;
+      
+      // Check for section headers
+      if (line.includes('[') && line.includes(']')) {
+        currentSection = line.match(/\[([^\]]+)\]/)[1];
+        config[currentSection] = {};
+        return;
+      }
+      
+      // Parse key-value pairs
+      if (currentSection && line.includes('=')) {
+        const [key, value] = line.split('=').map(s => s.trim());
+        // Simple parsing - handle basic types
+        if (value.startsWith('{') && value.endsWith('}')) {
+          // Parse inline object
+          const obj = {};
+          const parts = value.slice(1, -1).split(',').map(p => p.trim());
+          parts.forEach(part => {
+            const [k, v] = part.split('=').map(s => s.trim());
+            obj[k] = v.replace(/['"]/g, '');
+          });
+          config[currentSection][key] = obj;
+        } else {
+          config[currentSection][key] = value.replace(/['"]/g, '');
+        }
+      }
+    });
+    
+    commandConfig = config.commands || {};
+  }
+} catch (error) {
+  console.log(`⚠ Config parsing failed: ${error.message}`);
+}
+
 const banner = `
 ${cyan}   ██████╗ ███████╗██████╗
   ██╔════╝ ██╔════╝██╔══██╗
@@ -237,20 +286,28 @@ function install(platform, isGlobal) {
   fs.mkdirSync(commandsDir, { recursive: true });
 
   // Determine source directory based on platform
-  let commandSrc, commandDestName;
+  let commandSrc, commandDest;
 
   if (platform.code === 'claude') {
     commandSrc = path.join(src, 'commands', 'gsd');
-    commandDestName = 'gsd';
+    commandDest = path.join(commandsDir, 'gsd');
   } else if (platform.code === 'vibe') {
+    // For Vibe, install TOML files directly in commands/ directory
     commandSrc = path.join(src, 'vibe-commands', 'gsd');
-    commandDestName = 'gsd';
+    commandDest = commandsDir; // Install directly in commands/ for Vibe
   }
 
   // Copy commands
-  const commandDest = path.join(commandsDir, commandDestName);
   copyWithPathReplacement(commandSrc, commandDest, pathPrefix, platform);
-  console.log(`  ${green}✓${reset} Installed commands/${commandDestName} for ${platform.name}`);
+  console.log(`  ${green}✓${reset} Installed commands for ${platform.name}`);
+
+  // For Vibe, also copy the original MD commands for reference
+  if (platform.code === 'vibe') {
+    const commandsSrc = path.join(src, 'commands', 'gsd');
+    const commandsDest = path.join(commandsDir, 'gsd-md');
+    copyWithPathReplacement(commandsSrc, commandsDest, pathPrefix, platform);
+    console.log(`  ${green}✓${reset} Installed original GSD commands (for reference)`);
+  }
 
   // Copy skills/reference files (same for both platforms)
   const skillSrc = path.join(src, platform.skillsDir);

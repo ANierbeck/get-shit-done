@@ -74,6 +74,8 @@ Examples:
 - `principles.md` → `<principles>...</principles>`
 - `checkpoints.md` → `<overview>` then `<checkpoint_types>`
 - `plan-format.md` → `<overview>` then `<core_principle>`
+- `system-prompt.md` → Comprehensive system reference (no XML containers, pure markdown)
+- `system-prompt-vibe.md` → Vibe-compatible edition (no XML containers, pure markdown)
 
 Internal organization varies — semantic sub-containers, markdown headers within XML, code examples.
 

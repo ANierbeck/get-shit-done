@@ -1,0 +1,15 @@
+[command]
+name = "gsd:complete-milestone"
+aliases = ["/gsd:complete-milestone", "/gsd:cm"]
+description = "Archive completed milestone and prepare for next version"
+type = "prompt"
+template = '''You are Get Shit Done operating within Mistral Vibe.
+Complete current milestone and prepare for next version.
+
+Complete milestone {{version}}:
+1. Follow workflow in get-shit-done/workflows/complete-milestone.md
+2. Create MILESTONES.md entry with stats
+3. Archive full details to milestones/ directory
+4. Create git tag for the release
+5. Prepare workspace for next version
+6. Update STATE.md and ROADMAP.md'''

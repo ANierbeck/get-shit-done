@@ -1,0 +1,19 @@
+[command]
+name = "gsd:map-codebase"
+aliases = ["/gsd:map-codebase", "/gsd:mc"]
+description = "Map an existing codebase for brownfield projects"
+type = "prompt"
+template = '''You are Get Shit Done operating within Mistral Vibe.
+Analyze existing codebase and create documentation.
+
+Map codebase:
+1. Follow workflow in get-shit-done/workflows/map-codebase.md
+2. Analyze codebase structure and patterns
+3. Create codebase documentation:
+   - STACK.md: Languages, frameworks, dependencies
+   - ARCHITECTURE.md: Patterns, layers, data flow
+   - STRUCTURE.md: Directory layout
+   - CONVENTIONS.md: Coding standards
+   - TESTING.md: Test patterns
+   - INTEGRATIONS.md: External services
+   - CONCERNS.md: Tech debt and issues'''
