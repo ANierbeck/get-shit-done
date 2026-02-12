@@ -15,7 +15,7 @@
 |--------|---------|--------|
 | Total Skills | 27/27 | 27/27 ✅ |
 | Fully Migrated | 4/27 | 27/27 |
-| Priority 1 Migrated | 4/7 | 7/7 |
+| Priority 1 Migrated | 4/7 (1 partial) | 7/7 |
 | Priority 2 Migrated | 0/7 | 7/7 |
 | Priority 3 Migrated | 0/10 | 10/10 |
 
@@ -34,7 +34,7 @@
 
 | # | Skill | Complexity | Est. Time | Status |
 |---|-------|------------|----------|--------|
-| 1 | `new-project` | ⭐⭐⭐⭐⭐ (1008 lines) | 4-6h | ⏳ Backlog |
+| 1 | `new-project` | ⭐⭐⭐⭐⭐ (1008 lines) | 4-6h | 🟡 Partial (20%) |
 | 2 | `execute-phase` | ⭐⭐⭐⭐ (500+ lines) | 3-4h | ⏳ Backlog |
 | 3 | `plan-phase` | ⭐⭐⭐⭐ (400+ lines) | 2-3h | ⏳ Backlog |
 | 4 | `map-codebase` | ⭐⭐⭐ (300+ lines) | 2-3h | ⏳ Backlog |
