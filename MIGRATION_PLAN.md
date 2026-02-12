@@ -14,8 +14,8 @@
 | Metric | Current | Target |
 |--------|---------|--------|
 | Total Skills | 27/27 | 27/27 ✅ |
-| Fully Migrated | 3/27 | 27/27 |
-| Priority 1 Migrated | 3/7 | 7/7 |
+| Fully Migrated | 4/27 | 27/27 |
+| Priority 1 Migrated | 4/7 | 7/7 |
 | Priority 2 Migrated | 0/7 | 7/7 |
 | Priority 3 Migrated | 0/10 | 10/10 |
 
@@ -40,7 +40,7 @@
 | 4 | `map-codebase` | ⭐⭐⭐ (300+ lines) | 2-3h | ⏳ Backlog |
 | 5 | `add-phase` | ⭐⭐ (200+ lines) | 1-2h | ✅ Done (2/7) |
 | 6 | `check-todos` | ⭐⭐ (150+ lines) | 1-2h | ✅ Done (3/7) |
-| 7 | `complete-milestone` | ⭐⭐⭐ (250+ lines) | 2-3h | ⏳ Backlog |
+| 7 | `complete-milestone` | ⭐⭐⭐ (250+ lines) | 2-3h | ✅ Done (4/7) |
 
 **Total Estimate:** 15-23 hours
 **Priority:** 🔴 CRITICAL - These enable basic GSD workflow
