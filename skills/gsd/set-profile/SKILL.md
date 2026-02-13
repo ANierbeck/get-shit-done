@@ -1,13 +1,17 @@
 ---
 name: set-profile
-description: Switch model profile for GSD agents (quality/balanced/budget) Profile name: quality, balanced, or budget
+description: 'Switch model profile for GSD agents (quality/balanced/budget) Profile name: quality, balanced, or budget'
 license: MIT
 metadata:
   author: get-shit-done
   version: "1.0"
   category: project-management
-allowed-tools: 
+allowed-tools: ''
 ---
+  author: get-shit-done
+  version: 1.0
+  category: project-management
+allowed-tools: ''---
 
 # set-profile Skill
 

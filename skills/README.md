@@ -1,79 +1,150 @@
-# Get-Shit-Done Agent Skills
+# Get Shit Done - Agent Skills
 
-This directory contains Agent Skills for the Get-Shit-Done (GSD) project management system. These skills follow the [Agent Skills specification](https://agentskills.io/specification) and provide structured, executable capabilities for project management tasks.
+This directory contains Agent Skills for Get Shit Done, following the [Agent Skills specification](https://agentskills.io/specification).
 
-## Skills Structure
-
-Each skill is organized as a directory containing:
+## Structure
 
 ```
-skill-name/
-└── SKILL.md          # Required skill definition
+skills/
+├── gsd/                          # GSD skills namespace
+│   ├── gsd-help/                 # Individual skill
+│   │   └── SKILL.md             # Skill definition
+│   ├── gsd-progress/             # Another skill
+│   │   └── SKILL.md             # Skill definition
+│   └── ...                       # More skills
+├── validate_skills.py           # Skill validation script
+└── README.md                     # This file
 ```
-
-## Available Skills
-
-### Project Management Skills
-
-- **add-phase**: Add a new phase to the end of the current milestone
-- **add-todo**: Add a todo item to the current phase
-- **check-todos**: Review and manage todo items
-- **complete-milestone**: Mark a milestone as complete
-- **consider-issues**: Analyze potential issues and risks
-- **create-roadmap**: Generate a project roadmap
-- **debug**: Debug project issues and problems
-- **discuss-milestone**: Discuss milestone planning and progress
-- **discuss-phase**: Discuss phase planning and execution
-- **execute-phase**: Execute a phase plan
-- **execute-plan**: Execute a specific plan
-- **help**: Provide help and guidance
-- **insert-phase**: Insert a phase at a specific position
-- **list-phase-assumptions**: List assumptions for a phase
-- **map-codebase**: Analyze and map the codebase structure
-- **new-milestone**: Create a new milestone
-- **new-project**: Initialize a new project
-- **pause-work**: Pause work on the current project
-- **plan-fix**: Plan fixes for identified issues
-- **plan-phase**: Create detailed execution plan for a phase
-- **progress**: Check project progress and status
-- **remove-phase**: Remove a phase from the roadmap
-- **research-phase**: Research requirements for a phase
-- **resume-work**: Resume work on a paused project
-- **status**: Check current project status
-- **verify-work**: Verify completed work
 
 ## Skill Format
 
-Each skill follows the Agent Skills specification with:
+Each skill follows the Agent Skills specification:
 
-### Frontmatter (Required)
-- `name`: Skill name (lowercase alphanumeric + hyphens)
-- `description`: What the skill does and when to use it
-- `license`: License information
-- `metadata`: Additional metadata (author, version, category)
-- `allowed-tools`: Space-delimited list of approved tools
+### SKILL.md Structure
 
-### Body Content
-- **Objective**: What the skill accomplishes
-- **When to Use**: Appropriate use cases
-- **Process**: Step-by-step execution process
-- **Success Criteria**: Conditions for successful completion
-- **Anti-Patterns**: When not to use the skill
-- **Examples**: Usage examples
-- **Error Handling**: How errors are handled
+```yaml
+---
+name: skill-name                # Required: 1-64 chars, lowercase alphanumeric + hyphens
+description: What the skill does and when to use it  # Required: 1-1024 chars
+license: MIT                    # Optional: License information
+compatibility: Environment requirements  # Optional: Max 500 chars
+metadata:                       # Optional: Key-value pairs
+  author: Get Shit Done
+  version: "1.0"
+  command_type: reference
+---
 
-## Usage
+# Skill Documentation
 
-These skills can be used with any Agent Skills-compatible agent system. Each skill provides structured guidance for completing specific project management tasks within the GSD framework.
+## Purpose
+What this skill accomplishes
 
-## Development
+## When to Use
+- Situations where this skill should be activated
+- User intent patterns
 
-To add new skills:
+## How to Use
+Step-by-step instructions for the agent
 
-1. Create a new directory under `skills/gsd/`
-2. Add a `SKILL.md` file following the specification
-3. Include any supporting files in subdirectories (scripts/, references/, assets/)
+## Examples
+Usage examples and expected outputs
+
+## Tools Required
+- List of tools this skill needs
+
+## Context Files
+- Files this skill reads or references
+```
+
+## Validation
+
+Validate skills using the provided script:
+
+```bash
+# Validate a single skill
+python3 validate_skills.py gsd/gsd-help
+
+# Validate all skills in a directory
+python3 validate_skills.py gsd/
+
+# Validate multiple specific skills
+python3 validate_skills.py gsd/gsd-help gsd/gsd-progress
+```
+
+## Skill Development
+
+### Creating a New Skill
+
+1. **Create skill directory**:
+   ```bash
+   mkdir -p skills/gsd/new-skill-name
+   ```
+
+2. **Create SKILL.md** with proper frontmatter and documentation
+
+3. **Validate the skill**:
+   ```bash
+   python3 validate_skills.py skills/gsd/new-skill-name
+   ```
+
+4. **Test the skill** in your agent environment
+
+### Skill Naming Convention
+
+- Use lowercase alphanumeric characters and hyphens only
+- Prefix with namespace (e.g., `gsd-` for Get Shit Done skills)
+- Keep names descriptive but concise
+- Maximum 64 characters
+
+### Best Practices
+
+1. **Clear descriptions**: Include both what the skill does AND when to use it
+2. **Specific examples**: Provide concrete usage examples
+3. **Error handling**: Document how to handle missing files or errors
+4. **Tool specification**: List all required tools
+5. **Context files**: Document all files the skill reads or references
+
+## Integration with Get Shit Done
+
+### Current Skills
+
+- **gsd-help**: Displays command reference and usage guide
+- **gsd-progress**: Checks and reports project status and progress
+
+### Migration Plan
+
+The existing TOML-based command system will be gradually migrated to Agent Skills:
+
+1. **Phase 1**: Create Agent Skills alongside existing TOML commands
+2. **Phase 2**: Test and validate new skills
+3. **Phase 3**: Update installation process to support both systems
+4. **Phase 4**: Gradually migrate all commands to skills
+5. **Phase 5**: Deprecate TOML commands in favor of skills
+
+### Compatibility
+
+During the transition period, both systems will coexist:
+- TOML commands: `vibe-commands/gsd/*.toml`
+- Agent Skills: `skills/gsd/*/SKILL.md`
+
+## Agent Skills Specification Compliance
+
+This implementation follows the [Agent Skills specification](https://agentskills.io/specification):
+
+✅ **Directory structure**: Each skill in its own directory with SKILL.md
+✅ **YAML frontmatter**: Required fields (name, description) + optional fields
+✅ **Field validation**: Name format, description length, etc.
+✅ **Progressive disclosure**: Metadata loaded first, full content on demand
+✅ **Validation system**: Comprehensive validation script
+
+## Future Enhancements
+
+- **Skill discovery**: Automatic skill registration with agents
+- **Skill dependencies**: Support for skill prerequisites
+- **Skill versioning**: Version management and updates
+- **Skill marketplace**: Share and discover skills
+- **Performance optimization**: Caching and lazy loading
 
 ## License
 
-All skills are licensed under the MIT license unless otherwise specified.
+All skills are licensed under the MIT License unless otherwise specified.

@@ -1,12 +1,12 @@
 ---
 name: quick
-description: Execute a quick task with GSD guarantees (atomic commits, state tracking) but skip optional agents Prompt user interactively for the task description: Generate slug from description:
+description: 'Execute a quick task with GSD guarantees (atomic commits, state tracking) but skip optional agents Prompt user interactively for the task description: Generate slug from description:'
 license: MIT
 metadata:
   author: get-shit-done
   version: "1.0"
   category: project-management
-allowed-tools: 
+allowed-tools: ''
 ---
 
 # quick Skill

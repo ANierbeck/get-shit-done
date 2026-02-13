@@ -6,8 +6,12 @@ metadata:
   author: get-shit-done
   version: "1.0"
   category: project-management
-allowed-tools: 
+allowed-tools: ''
 ---
+  author: get-shit-done
+  version: 1.0
+  category: project-management
+allowed-tools: ''---
 
 # update Skill
 
