@@ -6,6 +6,7 @@ metadata:
   author: get-shit-done
   version: "1.0"
   category: project-management
+  gsd-tools: plan-discovery, dependency-analysis, wave-grouping
 allowed-tools: ''
 ---
 
@@ -13,15 +14,13 @@ allowed-tools: ''
 
 ## Objective
 
-Execute all plans in a phase using wave-based parallel execution.
+Execute all plans in a phase using wave-based parallel execution with gsd-tools integration.
 Orchestrator stays lean: discover plans, analyze dependencies, group into waves, spawn subagents, collect results. Each subagent loads the full execute-plan context and handles its own plan.
 Context budget: ~15% orchestrator, 100% fresh per subagent.
-@~/.claude/get-shit-done/workflows/execute-phase.md
-@~/.claude/get-shit-done/templates/subagent-task-prompt.md
+
+Uses gsd-tools for plan discovery, dependency analysis, and wave grouping.
 
 ## When to Use
-
-
 
 ## Process
 
@@ -70,8 +69,6 @@ All three run in parallel. Task tool blocks until all complete.
 - [ ] User informed of next steps
 
 ## Anti-Patterns
-
-
 
 ## Examples
 

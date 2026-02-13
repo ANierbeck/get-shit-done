@@ -6,6 +6,7 @@ metadata:
   author: get-shit-done
   version: "1.0"
   category: project-management
+  gsd-tools: uat-testing, validation-checks, quality-assurance
 allowed-tools: ''
 ---
 
@@ -16,12 +17,10 @@ allowed-tools: ''
 Validate built features through conversational testing with persistent state.
 Purpose: Confirm what Claude built actually works from user's perspective. One test at a time, plain text responses, no interrogation.
 Output: {phase}-UAT.md tracking all test results, issues logged for /gsd:plan-fix
-@~/.claude/get-shit-done/workflows/verify-work.md
+
 @~/.claude/get-shit-done/templates/UAT.md
 
 ## When to Use
-
-
 
 ## Process
 

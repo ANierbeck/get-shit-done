@@ -6,6 +6,7 @@ metadata:
   author: get-shit-done
   version: "1.0"
   category: project-management
+  gsd-tools: state-restoration, context-reconstruction, session-continuation
 allowed-tools: ''
 ---
   author: get-shit-done
@@ -28,11 +29,9 @@ Routes to the resume-project workflow which handles:
 
 ## When to Use
 
-
-
 ## Process
 
-**Follow the resume-project workflow** from `@~/.claude/get-shit-done/workflows/resume-project.md`.
+**Follow the resume-project workflow** from ``.
 The workflow handles all resumption logic including:
 1. Project existence verification
 2. STATE.md loading or reconstruction
@@ -45,11 +44,7 @@ The workflow handles all resumption logic including:
 
 ## Success Criteria
 
-
-
 ## Anti-Patterns
-
-
 
 ## Examples
 

@@ -6,6 +6,7 @@ metadata:
   author: get-shit-done
   version: "1.0"
   category: project-management
+  gsd-tools: core-operations, state-management
 allowed-tools: ''
 ---
 
@@ -19,8 +20,6 @@ Updates `.planning/config.json` with workflow preferences and model profile sele
 ```bash
 
 ## When to Use
-
-
 
 ## Process
 

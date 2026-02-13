@@ -6,6 +6,7 @@ metadata:
   author: get-shit-done
   version: "1.0"
   category: project-management
+  gsd-tools: core-operations, state-management
 allowed-tools: ''
 ---
   author: get-shit-done
@@ -22,8 +23,6 @@ Reads MILESTONE-AUDIT.md, groups gaps into logical phases, creates phase entries
 One command creates all fix phases — no manual `/gsd:add-phase` per gap.
 
 ## When to Use
-
-
 
 ## Process
 

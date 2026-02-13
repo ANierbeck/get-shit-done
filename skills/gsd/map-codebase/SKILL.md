@@ -6,6 +6,7 @@ metadata:
   author: get-shit-done
   version: "1.0"
   category: project-management
+  gsd-tools: codebase-analysis, structure-mapping, documentation-generation
 allowed-tools: ''
 ---
 
@@ -16,7 +17,7 @@ allowed-tools: ''
 Analyze existing codebase using parallel Explore agents to produce structured codebase documents.
 This command spawns multiple Explore agents to analyze different aspects of the codebase in parallel, each with fresh context.
 Output: .planning/codebase/ folder with 7 structured documents about the codebase state.
-@~/.claude/get-shit-done/workflows/map-codebase.md
+
 @~/.claude/get-shit-done/templates/codebase/stack.md
 
 ## When to Use
@@ -72,8 +73,6 @@ Output: .planning/codebase/ folder with 7 structured documents about the codebas
 - [ ] User knows next steps
 
 ## Anti-Patterns
-
-
 
 ## Examples
 

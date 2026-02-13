@@ -6,6 +6,7 @@ metadata:
   author: get-shit-done
   version: "1.0"
   category: project-management
+  gsd-tools: core-operations, state-management
 allowed-tools: ''
 ---
 
@@ -93,8 +94,6 @@ Output: RESEARCH.md with ecosystem knowledge that informs quality planning.
 - [ ] User knows next steps (plan phase)
 
 ## Anti-Patterns
-
-
 
 ## Examples
 

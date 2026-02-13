@@ -6,6 +6,7 @@ metadata:
   author: get-shit-done
   version: "1.0"
   category: project-management
+  gsd-tools: core-operations, state-management
 allowed-tools: ''
 ---
 
@@ -18,8 +19,6 @@ Enables seamless resumption in fresh session with full context restoration.
 @.planning/STATE.md
 
 ## When to Use
-
-
 
 ## Process
 
@@ -61,8 +60,6 @@ last_updated: [timestamp]
 ```
 
 ## Anti-Patterns
-
-
 
 ## Examples
 

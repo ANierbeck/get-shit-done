@@ -6,6 +6,7 @@ metadata:
   author: get-shit-done
   version: "1.0"
   category: project-management
+  gsd-tools: assumption-extraction, documentation-generation, analysis-frameworks
 allowed-tools: ''
 ---
 
@@ -16,11 +17,8 @@ allowed-tools: ''
 Analyze a phase and present Claude's assumptions about technical approach, implementation order, scope boundaries, risk areas, and dependencies.
 Purpose: Help users see what Claude thinks BEFORE planning begins - enabling course correction early when assumptions are wrong.
 Output: Conversational output only (no file creation) - ends with "What do you think?" prompt
-@~/.claude/get-shit-done/workflows/list-phase-assumptions.md
 
 ## When to Use
-
-
 
 ## Process
 
@@ -47,8 +45,6 @@ Output: Conversational output only (no file creation) - ends with "What do you t
   
 
 ## Anti-Patterns
-
-
 
 ## Examples
 

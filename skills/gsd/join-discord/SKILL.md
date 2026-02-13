@@ -6,6 +6,7 @@ metadata:
   author: get-shit-done
   version: "1.0"
   category: project-management
+  gsd-tools: core-operations, state-management
 allowed-tools: ''
 ---
   author: get-shit-done
@@ -24,15 +25,9 @@ Connect with other GSD users, get help, share what you're building, and stay upd
 
 ## When to Use
 
-
-
 ## Process
 
-
-
 ## Success Criteria
-
-
 
 ## Examples
 

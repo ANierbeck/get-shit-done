@@ -7,6 +7,7 @@ metadata:
   author: Get Shit Done
   version: "1.0"
   command_type: workflow
+  gsd-tools: core-operations, state-management
 ---
 
 # GSD Progress Skill

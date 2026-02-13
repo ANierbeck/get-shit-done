@@ -6,6 +6,7 @@ metadata:
   author: get-shit-done
   version: "1.0"
   category: project-management
+  gsd-tools: core-operations, state-management
 allowed-tools: ''
 ---
   author: get-shit-done
@@ -21,8 +22,6 @@ Verify milestone achieved its definition of done. Check requirements coverage, c
 **This command IS the orchestrator.** Reads existing VERIFICATION.md files (phases already verified during execute-phase), aggregates tech debt and deferred gaps, then spawns integration checker for cross-phase wiring.
 
 ## When to Use
-
-
 
 ## Process
 

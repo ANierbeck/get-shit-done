@@ -6,6 +6,7 @@ metadata:
   author: get-shit-done
   version: "1.0"
   category: project-management
+  gsd-tools: milestone-creation, phase-generation, roadmap-updates
 allowed-tools: ''
 ---
   author: get-shit-done
@@ -20,12 +21,10 @@ allowed-tools: ''---
 Create a new milestone for an existing project with defined phases.
 Purpose: After completing a milestone (or when ready to define next chunk of work), creates the milestone structure in ROADMAP.md with phases, updates STATE.md, and creates phase directories.
 Output: New milestone in ROADMAP.md, updated STATE.md, phase directories created
-@~/.claude/get-shit-done/workflows/create-milestone.md
+
 @~/.claude/get-shit-done/templates/roadmap.md
 
 ## When to Use
-
-
 
 ## Process
 
@@ -66,8 +65,6 @@ Output: New milestone in ROADMAP.md, updated STATE.md, phase directories created
   
 
 ## Anti-Patterns
-
-
 
 ## Examples
 

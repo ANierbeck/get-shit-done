@@ -6,6 +6,7 @@ metadata:
   author: get-shit-done
   version: "1.0"
   category: project-management
+  gsd-tools: core-operations, state-management
 allowed-tools: ''
 ---
   author: get-shit-done
@@ -25,8 +26,6 @@ Switch the model profile used by GSD agents. This controls which Claude model ea
 | **budget** | Sonnet for writing, Haiku for research/verification |
 
 ## When to Use
-
-
 
 ## Process
 
@@ -71,8 +70,6 @@ Write updated config back to `.planning/config.json`.
 ## 4. Confirm
 
 ## Success Criteria
-
-
 
 ## Examples
 

@@ -6,6 +6,7 @@ metadata:
   author: get-shit-done
   version: "1.0"
   category: project-management
+  gsd-tools: core-operations, state-management
 allowed-tools: ''
 ---
 
@@ -25,8 +26,6 @@ Read its `` section.
 `/gsd:execute-plan [full-path-to-PLAN.md]`
 
 ## When to Use
-
-
 
 ## Process
 
@@ -71,8 +70,6 @@ If missing STATE.md or ROADMAP.md: inform what's missing, suggest running `/gsd:
       
 
 ## Anti-Patterns
-
-
 
 ## Examples
 

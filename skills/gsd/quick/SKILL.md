@@ -6,6 +6,7 @@ metadata:
   author: get-shit-done
   version: "1.0"
   category: project-management
+  gsd-tools: core-operations, state-management
 allowed-tools: ''
 ---
 
@@ -22,8 +23,6 @@ Quick mode is the same system with a shorter path:
 Use when: You know exactly what to do and the task is small enough to not need research or verification.
 
 ## When to Use
-
-
 
 ## Process
 

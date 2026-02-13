@@ -6,6 +6,7 @@ metadata:
   author: get-shit-done
   version: "1.0"
   category: project-management
+  gsd-tools: plan-generation, dependency-mapping, resource-allocation
 allowed-tools: ''
 ---
 
@@ -16,13 +17,11 @@ allowed-tools: ''
 Create executable phase prompt with discovery, context injection, and task breakdown.
 Purpose: Break down roadmap phases into concrete, executable PLAN.md files that Claude can execute.
 Output: One or more PLAN.md files in the phase directory (.planning/phases/XX-name/{phase}-{plan}-PLAN.md)
-@~/.claude/get-shit-done/workflows/plan-phase.md
+
 @~/.claude/get-shit-done/templates/phase-prompt.md
 @~/.claude/get-shit-done/references/plan-format.md
 
 ## When to Use
-
-
 
 ## Process
 
@@ -51,8 +50,6 @@ Output: One or more PLAN.md files in the phase directory (.planning/phases/XX-na
   
 
 ## Anti-Patterns
-
-
 
 ## Examples
 

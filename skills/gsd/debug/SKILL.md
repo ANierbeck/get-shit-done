@@ -6,6 +6,7 @@ metadata:
   author: get-shit-done
   version: "1.0"
   category: project-management
+  gsd-tools: error-analysis, logging-inspection, state-diagnosis
 allowed-tools: ''
 ---
 
@@ -16,16 +17,14 @@ allowed-tools: ''
 Debug issues using scientific method with a persistent debug document that survives `/clear`.
 If resuming (no arguments and active session exists): pick up where you left off.
 If starting new: gather symptoms, then investigate autonomously.
-@~/.claude/get-shit-done/workflows/debug.md
+
 @~/.claude/get-shit-done/templates/DEBUG.md
 
 ## When to Use
 
-
-
 ## Process
 
-Follow the workflow in @~/.claude/get-shit-done/workflows/debug.md
+Follow the workflow in 
 **Quick reference:**
 1. **Check for active sessions** - Offer to resume or start new
 2. **Gather symptoms** - What happened? What should happen? Errors? When?
@@ -51,8 +50,6 @@ Follow the workflow in @~/.claude/get-shit-done/workflows/debug.md
 - [ ] Fix verified and session archived
 
 ## Anti-Patterns
-
-
 
 ## Examples
 

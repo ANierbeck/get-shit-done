@@ -6,6 +6,7 @@ metadata:
   author: get-shit-done
   version: "1.0"
   category: project-management
+  gsd-tools: context-gathering, question-formulation, conversation-analysis
 allowed-tools: ''
 ---
 
@@ -16,12 +17,10 @@ allowed-tools: ''
 Help the user articulate their vision for a phase through collaborative thinking.
 Purpose: Understand HOW the user imagines this phase working — what it looks like, what's essential. You're a thinking partner helping them crystallize their vision, not an interviewer gathering technical requirements.
 Output: {phase}-CONTEXT.md capturing the user's vision for the phase
-@~/.claude/get-shit-done/workflows/discuss-phase.md
+
 @~/.claude/get-shit-done/templates/context.md
 
 ## When to Use
-
-
 
 ## Process
 
@@ -56,8 +55,6 @@ User is the visionary, you are the builder:
 - User knows next steps (research or plan the phase)
 
 ## Anti-Patterns
-
-
 
 ## Examples
 

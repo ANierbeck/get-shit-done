@@ -6,6 +6,7 @@ metadata:
   author: get-shit-done
   version: "1.0"
   category: project-management
+  gsd-tools: core-operations, state-management
 allowed-tools: ''
 ---
   author: get-shit-done
@@ -22,8 +23,6 @@ Provides a better update experience than raw `npx get-shit-done-cc` by showing v
 Detect whether GSD is installed locally or globally by checking both locations:
 
 ## When to Use
-
-
 
 ## Process
 

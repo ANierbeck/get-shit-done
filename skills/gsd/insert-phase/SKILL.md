@@ -6,6 +6,7 @@ metadata:
   author: get-shit-done
   version: "1.0"
   category: project-management
+  gsd-tools: core-operations, state-management
 allowed-tools: ''
 ---
   author: get-shit-done
@@ -24,8 +25,6 @@ Purpose: Handle urgent work discovered during execution without renumbering enti
 @.planning/STATE.md
 
 ## When to Use
-
-
 
 ## Process
 
