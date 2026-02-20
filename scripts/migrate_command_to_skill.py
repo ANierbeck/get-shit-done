@@ -75,6 +75,21 @@ def generate_skill_frontmatter(command_data: Dict) -> str:
     # Process allowed-tools
     allowed_tools = frontmatter.get('allowed-tools', [])
     
+    # Define valid tools for Mistral-Vibe
+    valid_tools = {'Read', 'Write', 'Bash', 'Glob', 'AskUserQuestion', 'AskUserConfirmation'}
+    
+    # Define tool mappings for invalid/unsupported tools
+    tool_mapping = {
+        'Grep': 'Bash',  # Grep can be done with Bash
+        'Edit': 'Write',  # Edit is similar to Write
+        'Task': 'Bash',   # Task execution via Bash
+        'SlashCommand': 'Bash',  # Slash commands via Bash
+        'TodoWrite': 'Write',  # TodoWrite is similar to Write
+        'WebFetch': 'Bash',  # Web fetching via Bash/curl
+        'Read,': 'Read',  # Clean up trailing commas
+        'Write,': 'Write',  # Clean up trailing commas
+    }
+    
     # Handle missing or empty allowed-tools
     if not allowed_tools or (isinstance(allowed_tools, str) and not allowed_tools.strip()):
         # Default tools for skills based on command type
@@ -89,19 +104,41 @@ def generate_skill_frontmatter(command_data: Dict) -> str:
         else:
             allowed_tools_str = 'Read Write Bash'
     elif isinstance(allowed_tools, list):
-        # Convert list to space-separated string
-        allowed_tools_str = ' '.join(str(tool).strip(",'[]") for tool in allowed_tools)
+        # Convert list to space-separated string, mapping invalid tools
+        tools_list = []
+        for tool in allowed_tools:
+            tool_str = str(tool).strip(",'[] ")
+            # Map invalid tools to valid ones
+            mapped_tool = tool_mapping.get(tool_str, tool_str)
+            if mapped_tool in valid_tools:
+                tools_list.append(mapped_tool)
+        allowed_tools_str = ' '.join(tools_list) if tools_list else 'Read Write Bash'
     elif isinstance(allowed_tools, str):
-        # Clean up string format
-        allowed_tools_str = allowed_tools.strip(",'[]")
+        # Clean up string format and map invalid tools
+        tools_list = []
+        for tool in allowed_tools.split():
+            tool_clean = tool.strip(",'[]")
+            # Map invalid tools to valid ones
+            mapped_tool = tool_mapping.get(tool_clean, tool_clean)
+            if mapped_tool in valid_tools:
+                tools_list.append(mapped_tool)
+        allowed_tools_str = ' '.join(tools_list) if tools_list else 'Read Write Bash'
     else:
         # Default tools for skills
         allowed_tools_str = 'Read Write Bash'
     
+    # Clean up description for Claude references
+    original_description = frontmatter.get('description', f'[TODO: Add description for {command_name}]')
+    # Replace Claude references in description
+    description = re.sub(r'\bClaude\b', 'Agent', original_description, flags=re.IGNORECASE)
+    description = re.sub(r'\bclaude\b', 'agent', description, flags=re.IGNORECASE)
+    description = re.sub(r'Claude\'s', 'Agent\'s', description, flags=re.IGNORECASE)
+    description = re.sub(r'Claude\\s+assumptions', 'Agent assumptions', description, flags=re.IGNORECASE)
+    
     # Create new frontmatter structure
     skill_frontmatter = {
         'name': command_name.replace('gsd:', ''),  # Remove gsd: prefix
-        'description': frontmatter.get('description', f'[TODO: Add description for {command_name}]'),
+        'description': description,
         'license': 'MIT',
         'metadata': {
             'author': 'get-shit-done',
@@ -112,10 +149,18 @@ def generate_skill_frontmatter(command_data: Dict) -> str:
         'allowed-tools': allowed_tools_str
     }
     
-    # Format as YAML
+    # Format as YAML with proper escaping
     yaml_lines = []
     yaml_lines.append(f"name: {skill_frontmatter['name']}")
-    yaml_lines.append(f"description: '{skill_frontmatter['description']}'")
+    
+    # Handle description with special characters
+    description = skill_frontmatter['description']
+    if ':' in description or description.strip().startswith('-') or description.strip().startswith('['):
+        # Quote description if it contains special YAML characters
+        yaml_lines.append(f"description: '{description}'")
+    else:
+        yaml_lines.append(f"description: {description}")
+    
     yaml_lines.append(f"license: {skill_frontmatter['license']}")
     yaml_lines.append("metadata:")
     for key, value in skill_frontmatter['metadata'].items():
@@ -183,6 +228,8 @@ def generate_skill_content(command_data: Dict) -> str:
         objective = re.sub(r'\*\*Follow the [\w-]+ workflow\*\*.*?\.', '', objective)
         objective = re.sub(r'\bClaude\b', 'Agent', objective, flags=re.IGNORECASE)
         objective = re.sub(r'\bclaude\b', 'agent', objective, flags=re.IGNORECASE)
+        objective = re.sub(r'Claude\'s', 'Agent\'s', objective, flags=re.IGNORECASE)
+        objective = re.sub(r'Claude\\s+assumptions', 'Agent assumptions', objective, flags=re.IGNORECASE)
         objective = re.sub(r'\n{2,}', '\n\n', objective)
         objective = objective.strip()
         content_parts.append(objective)
@@ -224,6 +271,8 @@ def generate_skill_content(command_data: Dict) -> str:
         process = re.sub(r'\*\*Follow the [\w-]+ workflow\*\*.*?\.', '', process)
         process = re.sub(r'\bClaude\b', 'Agent', process, flags=re.IGNORECASE)
         process = re.sub(r'\bclaude\b', 'agent', process, flags=re.IGNORECASE)
+        process = re.sub(r'Claude\'s', 'Agent\'s', process, flags=re.IGNORECASE)
+        process = re.sub(r'Claude\\s+assumptions', 'Agent assumptions', process, flags=re.IGNORECASE)
         process = re.sub(r'\n{2,}', '\n\n', process)
         process = process.strip()
         
