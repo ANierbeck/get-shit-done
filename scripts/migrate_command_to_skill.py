@@ -254,10 +254,34 @@ def generate_skill_content(command_data: Dict) -> str:
     # When to Use section
     content_parts.append("## When to Use")
     content_parts.append("")
-    content_parts.append("- [TODO: Add when to use this skill]")
+    
+    # Check if we have workflow reference for usage guidelines
+    if 'execution_context' in sections:
+        workflow_file = sections['execution_context']
+        workflow_match = re.search(r'@~/.claude/get-shit-done/workflows/([\w-]+\.md)', workflow_file)
+        if workflow_match:
+            workflow_name = workflow_match.group(1)
+            content_parts.append(f"📖 **Usage Guidelines**: See `.planning/workflows/{workflow_name}` for detailed usage scenarios and best practices.")
+        else:
+            content_parts.append("- [TODO: Add when to use this skill]")
+    else:
+        content_parts.append("- [TODO: Add when to use this skill]")
+    
     content_parts.append("")
     content_parts.append("**Do NOT use when:**")
-    content_parts.append("- [TODO: Add anti-patterns]")
+    
+    # Check if we have workflow reference for anti-patterns
+    if 'execution_context' in sections:
+        workflow_file = sections['execution_context']
+        workflow_match = re.search(r'@~/.claude/get-shit-done/workflows/([\w-]+\.md)', workflow_file)
+        if workflow_match:
+            workflow_name = workflow_match.group(1)
+            content_parts.append(f"📖 **Anti-Patterns**: See `.planning/workflows/{workflow_name}` for common mistakes and recommended alternatives.")
+        else:
+            content_parts.append("- [TODO: Add anti-patterns]")
+    else:
+        content_parts.append("- [TODO: Add anti-patterns]")
+    
     content_parts.append("")
     
     # Process section
@@ -293,38 +317,67 @@ def generate_skill_content(command_data: Dict) -> str:
     # Output section
     content_parts.append("## Output")
     content_parts.append("")
-    content_parts.append("- [TODO: Describe outputs of this skill]")
+    
+    # Check if we have workflow reference
+    if 'execution_context' in sections:
+        workflow_file = sections['execution_context']
+        workflow_match = re.search(r'@~/.claude/get-shit-done/workflows/([\w-]+\.md)', workflow_file)
+        if workflow_match:
+            workflow_name = workflow_match.group(1)
+            content_parts.append(f"📖 **Output Details**: See `.planning/workflows/{workflow_name}` for expected outputs and results.")
+        else:
+            content_parts.append("- [TODO: Describe outputs of this skill]")
+    else:
+        content_parts.append("- [TODO: Describe outputs of this skill]")
+    
     content_parts.append("")
     
     # Success Criteria section
     content_parts.append("## Success Criteria")
     content_parts.append("")
-    content_parts.append("- [ ] [TODO: Add success criteria]")
-    content_parts.append("")
     
-    # Anti-Patterns section
-    content_parts.append("## Anti-Patterns")
-    content_parts.append("")
-    content_parts.append("- **Don't** [TODO: Add anti-pattern 1]")
-    content_parts.append("- **Don't** [TODO: Add anti-pattern 2]")
+    # Check if we have workflow reference
+    if 'execution_context' in sections:
+        workflow_file = sections['execution_context']
+        workflow_match = re.search(r'@~/.claude/get-shit-done/workflows/([\w-]+\.md)', workflow_file)
+        if workflow_match:
+            workflow_name = workflow_match.group(1)
+            content_parts.append(f"📖 **Success Criteria**: See `.planning/workflows/{workflow_name}` for completion checklist and validation requirements.")
+        else:
+            content_parts.append("- [ ] [TODO: Add success criteria]")
+    else:
+        content_parts.append("- [ ] [TODO: Add success criteria]")
+    
     content_parts.append("")
     
     # Examples section
     content_parts.append("## Examples")
     content_parts.append("")
-    content_parts.append("### Example 1: [TODO: Add example title]")
-    content_parts.append("```")
-    content_parts.append("Input: [TODO: Add example input]")
-    content_parts.append("Output: [TODO: Add example output]")
-    content_parts.append("```")
+    
+    # Check if we have workflow reference for examples
+    if 'execution_context' in sections:
+        workflow_file = sections['execution_context']
+        workflow_match = re.search(r'@~/.claude/get-shit-done/workflows/([\w-]+\.md)', workflow_file)
+        if workflow_match:
+            workflow_name = workflow_match.group(1)
+            content_parts.append(f"📖 **Usage Examples**: See `.planning/workflows/{workflow_name}` for practical examples and use cases.")
+        else:
+            content_parts.append("### Example 1: [TODO: Add example title]")
+            content_parts.append("```")
+            content_parts.append("Input: [TODO: Add example input]")
+            content_parts.append("Output: [TODO: Add example output]")
+            content_parts.append("```")
+    else:
+        content_parts.append("### Example 1: [TODO: Add example title]")
+        content_parts.append("```")
+        content_parts.append("Input: [TODO: Add example input]")
+        content_parts.append("Output: [TODO: Add example output]")
+        content_parts.append("```")
+    
     content_parts.append("")
     
-    # Error Handling section
-    content_parts.append("## Error Handling")
-    content_parts.append("")
-    content_parts.append("- **Error condition 1:** [TODO: Add error description]")
-    content_parts.append("- **Error condition 2:** [TODO: Add error description]")
-    content_parts.append("")
+    # Error Handling section (omit entirely as it requires real-world experience)
+    # Error handling is best documented after actual usage and testing
     
     return '\n'.join(content_parts)
 
