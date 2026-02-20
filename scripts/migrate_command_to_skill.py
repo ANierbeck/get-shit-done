@@ -74,7 +74,21 @@ def generate_skill_frontmatter(command_data: Dict) -> str:
     
     # Process allowed-tools
     allowed_tools = frontmatter.get('allowed-tools', [])
-    if isinstance(allowed_tools, list):
+    
+    # Handle missing or empty allowed-tools
+    if not allowed_tools or (isinstance(allowed_tools, str) and not allowed_tools.strip()):
+        # Default tools for skills based on command type
+        if 'phase' in command_name.lower():
+            allowed_tools_str = 'Read Write Bash'
+        elif 'todo' in command_name.lower():
+            allowed_tools_str = 'Read Write Bash AskUserQuestion'
+        elif 'cleanup' in command_name.lower():
+            allowed_tools_str = 'Read Write Bash Glob'
+        elif 'health' in command_name.lower():
+            allowed_tools_str = 'Read Write Bash AskUserQuestion'
+        else:
+            allowed_tools_str = 'Read Write Bash'
+    elif isinstance(allowed_tools, list):
         # Convert list to space-separated string
         allowed_tools_str = ' '.join(str(tool).strip(",'[]") for tool in allowed_tools)
     elif isinstance(allowed_tools, str):
