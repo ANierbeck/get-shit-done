@@ -38,7 +38,9 @@ def parse_command_file(command_path: Path) -> Optional[Dict]:
     xml_content = content[frontmatter_match.end():].strip()
     
     # Parse XML sections
-    sections = {}
+    sections = {
+        'xml_content': xml_content  # Store full XML content for smart extraction
+    }
     
     # Extract objective
     objective_match = re.search(r'<objective>(.*?)</objective>', xml_content, re.DOTALL)
@@ -65,6 +67,84 @@ def parse_command_file(command_path: Path) -> Optional[Dict]:
         'sections': sections,
         'command_name': command_path.stem
     }
+
+def extract_smart_content(command_data: Dict) -> Dict:
+    """Extract additional content from command files using smart pattern matching."""
+    sections = command_data['sections']
+    objective = sections.get('objective', '')
+    xml_content = sections.get('xml_content', '')
+    
+    smart_content = {
+        'usage_guidelines': [],
+        'anti_patterns': [],
+        'output_details': [],
+        'success_criteria': []
+    }
+    
+    # Extract usage guidelines from objective
+    usage_patterns = [
+        r'Use this command when:\s*(.*?)(?=\n\n|\n\*\*|\n##|\n<|$)',
+        r'Use when\s*(.*?)(?=\n\n|\n\*\*|\n##|\n<|$)',
+        r'Purpose:\s*(.*?)(?=\n\n|\n\*\*|\n##|\n<|$)',
+        r'When to use:\s*(.*?)(?=\n\n|\n\*\*|\n##|\n<|$)'
+    ]
+    
+    for pattern in usage_patterns:
+        matches = re.findall(pattern, objective, re.DOTALL)
+        for match in matches:
+            # Clean up the extracted text
+            cleaned = re.sub(r'\*\*', '', match).strip()
+            # Split into bullet points if it contains newlines
+            items = [item.strip() for item in cleaned.split('\n') if item.strip() and not item.startswith('- ')]
+            # Extract bullet points separately
+            bullet_items = re.findall(r'-\s*(.*?)(?=\n|$)', cleaned)
+            items.extend(bullet_items)
+            smart_content['usage_guidelines'].extend(items)
+    
+    # Extract anti-patterns from notes and warnings
+    anti_patterns = [
+        r'\*\*Note:\*\*\s*(.*?)(?=\n\n|\n\*\*|\n##|\n<|$)',
+        r'\*\*Warning:\*\*\s*(.*?)(?=\n\n|\n\*\*|\n##|\n<|$)',
+        r'\*\*Do NOT\*\*\s*(.*?)(?=\n\n|\n\*\*|\n##|\n<|$)',
+        r'\*\*Important:\*\*\s*(.*?)(?=\n\n|\n\*\*|\n##|\n<|$)'
+    ]
+    
+    for pattern in anti_patterns:
+        matches = re.findall(pattern, objective, re.DOTALL)
+        for match in matches:
+            cleaned = re.sub(r'\*\*', '', match).strip()
+            if cleaned:
+                smart_content['anti_patterns'].append(cleaned)
+    
+    # Extract output details from output sections and file references
+    output_match = re.search(r'<output>(.*?)</output>', xml_content, re.DOTALL)
+    if output_match:
+        output_content = output_match.group(1).strip()
+        # Extract file references
+        file_refs = re.findall(r'<files_to_read>(.*?)</files_to_read>', output_content, re.DOTALL)
+        for file_ref in file_refs:
+            files = [f.strip() for f in file_ref.split('\n') if f.strip() and not f.startswith('<!--')]
+            for file in files:
+                # Clean up file references
+                cleaned = re.sub(r'\*\*|<!--.*?-->', '', file).strip()
+                if cleaned:
+                    smart_content['output_details'].append(f"Creates/modifies: {cleaned}")
+        
+        # Extract general output description
+        lines = [line.strip() for line in output_content.split('\n') if line.strip()]
+        for line in lines:
+            if not line.startswith('<') and not line.startswith('<!--') and line:
+                smart_content['output_details'].append(line)
+    
+    # Extract success criteria
+    criteria_match = re.search(r'<success_criteria>(.*?)</success_criteria>', xml_content, re.DOTALL)
+    if criteria_match:
+        criteria_content = criteria_match.group(1).strip()
+        # Extract bullet points
+        criteria_items = re.findall(r'- \[ \] (.*?)(?=\n|$)', criteria_content)
+        smart_content['success_criteria'].extend(criteria_items)
+    
+    return smart_content
 
 def generate_skill_frontmatter(command_data: Dict) -> str:
     """Generate YAML frontmatter for the skill."""
@@ -204,10 +284,18 @@ def get_gsd_tools_for_command(command_name: str) -> str:
     
     return tools_map.get(base_name, 'core-operations, state-management')
 
-def generate_skill_content(command_data: Dict) -> str:
+def generate_skill_content(command_data: Dict, smart_content: Dict = None) -> str:
     """Generate the main content for the skill."""
     sections = command_data['sections']
     command_name = command_data['command_name']
+    
+    if smart_content is None:
+        smart_content = {
+            'usage_guidelines': [],
+            'anti_patterns': [],
+            'output_details': [],
+            'success_criteria': []
+        }
     
     content_parts = []
     
@@ -254,8 +342,12 @@ def generate_skill_content(command_data: Dict) -> str:
     content_parts.append("## When to Use")
     content_parts.append("")
     
-    # Check if we have workflow reference for usage guidelines
-    if 'execution_context' in sections:
+    # Use smart extracted usage guidelines if available
+    if smart_content['usage_guidelines']:
+        content_parts.append("📖 **Usage Guidelines**:")
+        for guideline in smart_content['usage_guidelines']:
+            content_parts.append(f"- {guideline}")
+    elif 'execution_context' in sections:
         workflow_file = sections['execution_context']
         workflow_match = re.search(r'@~/.claude/get-shit-done/workflows/([\w-]+\.md)', workflow_file)
         if workflow_match:
@@ -270,8 +362,11 @@ def generate_skill_content(command_data: Dict) -> str:
     content_parts.append("")
     content_parts.append("**Do NOT use when:**")
     
-    # Check if we have workflow reference for anti-patterns
-    if 'execution_context' in sections:
+    # Use smart extracted anti-patterns if available
+    if smart_content['anti_patterns']:
+        for anti_pattern in smart_content['anti_patterns']:
+            content_parts.append(f"- {anti_pattern}")
+    elif 'execution_context' in sections:
         workflow_file = sections['execution_context']
         workflow_match = re.search(r'@~/.claude/get-shit-done/workflows/([\w-]+\.md)', workflow_file)
         if workflow_match:
@@ -319,8 +414,11 @@ def generate_skill_content(command_data: Dict) -> str:
     content_parts.append("## Output")
     content_parts.append("")
     
-    # Check if we have workflow reference
-    if 'execution_context' in sections:
+    # Use smart extracted output details if available
+    if smart_content['output_details']:
+        for output_detail in smart_content['output_details']:
+            content_parts.append(f"- {output_detail}")
+    elif 'execution_context' in sections:
         workflow_file = sections['execution_context']
         workflow_match = re.search(r'@~/.claude/get-shit-done/workflows/([\w-]+\.md)', workflow_file)
         if workflow_match:
@@ -338,8 +436,11 @@ def generate_skill_content(command_data: Dict) -> str:
     content_parts.append("## Success Criteria")
     content_parts.append("")
     
-    # Check if we have workflow reference
-    if 'execution_context' in sections:
+    # Use smart extracted success criteria if available
+    if smart_content['success_criteria']:
+        for criterion in smart_content['success_criteria']:
+            content_parts.append(f"- [ ] {criterion}")
+    elif 'execution_context' in sections:
         workflow_file = sections['execution_context']
         workflow_match = re.search(r'@~/.claude/get-shit-done/workflows/([\w-]+\.md)', workflow_file)
         if workflow_match:
@@ -406,9 +507,12 @@ def migrate_command_to_skill(command_path: Path, skills_dir: Path) -> bool:
         print(f"❌ Failed to create skill directory {skill_dir}: {e}")
         return False
     
+    # Extract smart content for enhanced skill generation
+    smart_content = extract_smart_content(command_data)
+    
     # Generate skill content
     frontmatter = generate_skill_frontmatter(command_data)
-    content = generate_skill_content(command_data)
+    content = generate_skill_content(command_data, smart_content)
     
     # Write SKILL.md file
     skill_md_path = skill_dir / "SKILL.md"
