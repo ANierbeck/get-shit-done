@@ -5,7 +5,6 @@ Command to Skill Migration Script for Get Shit Done
 Converts command files from commands/gsd/ to skill format in skills/gsd/<command-name>/
 """
 
-import os
 import re
 import sys
 import yaml
@@ -246,7 +245,7 @@ def generate_skill_content(command_data: Dict) -> str:
         files = re.findall(r'@~/.claude/get-shit-done/workflows/([\w-]+\.md)', execution_context)
         if files:
             for file in files:
-                content_parts.append(f"- `.planning/workflows/{file}` — [TODO: Add description]")
+                content_parts.append(f"- `~/.vibe/get-shit-done/workflows/{file}` — [TODO: Add description]")
         else:
             content_parts.append("- [TODO: List files modified by this skill]")
         content_parts.append("")
@@ -261,7 +260,8 @@ def generate_skill_content(command_data: Dict) -> str:
         workflow_match = re.search(r'@~/.claude/get-shit-done/workflows/([\w-]+\.md)', workflow_file)
         if workflow_match:
             workflow_name = workflow_match.group(1)
-            content_parts.append(f"📖 **Usage Guidelines**: See `.planning/workflows/{workflow_name}` for detailed usage scenarios and best practices.")
+            # Always use Mistral-Vibe path structure
+            content_parts.append(f"📖 **Usage Guidelines**: See `~/.vibe/get-shit-done/workflows/{workflow_name}` for detailed usage scenarios and best practices.")
         else:
             content_parts.append("- [TODO: Add when to use this skill]")
     else:
@@ -276,7 +276,8 @@ def generate_skill_content(command_data: Dict) -> str:
         workflow_match = re.search(r'@~/.claude/get-shit-done/workflows/([\w-]+\.md)', workflow_file)
         if workflow_match:
             workflow_name = workflow_match.group(1)
-            content_parts.append(f"📖 **Anti-Patterns**: See `.planning/workflows/{workflow_name}` for common mistakes and recommended alternatives.")
+            # Always use Mistral-Vibe path structure
+            content_parts.append(f"📖 **Anti-Patterns**: See `~/.vibe/get-shit-done/workflows/{workflow_name}` for common mistakes and recommended alternatives.")
         else:
             content_parts.append("- [TODO: Add anti-patterns]")
     else:
@@ -324,7 +325,8 @@ def generate_skill_content(command_data: Dict) -> str:
         workflow_match = re.search(r'@~/.claude/get-shit-done/workflows/([\w-]+\.md)', workflow_file)
         if workflow_match:
             workflow_name = workflow_match.group(1)
-            content_parts.append(f"📖 **Output Details**: See `.planning/workflows/{workflow_name}` for expected outputs and results.")
+            # Always use Mistral-Vibe path structure
+            content_parts.append(f"📖 **Output Details**: See `~/.vibe/get-shit-done/workflows/{workflow_name}` for expected outputs and results.")
         else:
             content_parts.append("- [TODO: Describe outputs of this skill]")
     else:
@@ -342,7 +344,8 @@ def generate_skill_content(command_data: Dict) -> str:
         workflow_match = re.search(r'@~/.claude/get-shit-done/workflows/([\w-]+\.md)', workflow_file)
         if workflow_match:
             workflow_name = workflow_match.group(1)
-            content_parts.append(f"📖 **Success Criteria**: See `.planning/workflows/{workflow_name}` for completion checklist and validation requirements.")
+            # Always use Mistral-Vibe path structure for skills
+            content_parts.append(f"📖 **Success Criteria**: See `~/.vibe/get-shit-done/workflows/{workflow_name}` for completion checklist and validation requirements.")
         else:
             content_parts.append("- [ ] [TODO: Add success criteria]")
     else:
@@ -360,7 +363,8 @@ def generate_skill_content(command_data: Dict) -> str:
         workflow_match = re.search(r'@~/.claude/get-shit-done/workflows/([\w-]+\.md)', workflow_file)
         if workflow_match:
             workflow_name = workflow_match.group(1)
-            content_parts.append(f"📖 **Usage Examples**: See `.planning/workflows/{workflow_name}` for practical examples and use cases.")
+            # Always use Mistral-Vibe path structure for skills
+            content_parts.append(f"📖 **Usage Examples**: See `~/.vibe/get-shit-done/workflows/{workflow_name}` for practical examples and use cases.")
         else:
             content_parts.append("### Example 1: [TODO: Add example title]")
             content_parts.append("```")
