@@ -8,6 +8,7 @@ Core LLM migration logic with Mistral integration
 import os
 import re
 import sys
+import time
 from pathlib import Path
 from typing import Dict, List, Optional
 from dotenv import load_dotenv
@@ -31,6 +32,12 @@ class SkillMigrationAgent:
     def _create_system_prompt(self) -> str:
         """Create system prompt with specification requirements"""
         return """You are a Get Shit Done (GSD) Skill Migration Expert. Your task is to convert GSD command files to skill format according to the agentskills.io specification.
+
+## CRITICAL FORMATTING RULES:
+1. NEVER wrap the response in markdown code fences (no ```markdown at start/end)
+2. Start response DIRECTLY with YAML frontmatter (---)
+3. End response cleanly without any closing code fences
+4. Respond ONLY with the complete SKILL.md content, nothing else
 
 ## Requirements:
 1. Follow the SKILL.md specification exactly
@@ -64,8 +71,14 @@ Respond ONLY with the complete SKILL.md content, nothing else."""
 
     def _create_user_prompt(self, context: Dict) -> str:
         """Create detailed user prompt with all context"""
-        # Format tools list
-        tools_list = ", ".join(context['tools']) if isinstance(context['tools'], list) else context['tools']
+        # Format tools list safely
+        tools = context.get('tools', [])
+        if isinstance(tools, str):
+            tools_list = tools
+        elif isinstance(tools, list):
+            tools_list = ", ".join(tools)
+        else:
+            tools_list = str(tools)
         
         # Format workflow steps
         steps_content = ""
@@ -118,37 +131,64 @@ Respond ONLY with the complete SKILL.md content, nothing else."""
 Generate the complete SKILL.md file:"""
 
     def _call_llm(self, system_prompt: str, user_prompt: str) -> str:
-        """Call Mistral API - placeholder for actual implementation"""
-        # In production, this would call the actual Mistral API
-        # For now, we'll simulate with a simple response
-        
+        """Call Mistral API using REST interface"""
         try:
-            # Try to import mistralai for real implementation
-            from mistralai.client import MistralClient
-            from mistralai.models.chat_completion import ChatMessage
+            import httpx
+            import json
             
-            client = MistralClient(api_key=os.getenv('MISTRAL_API_KEY'))
+            # Use Mistral REST API directly
+            api_key = os.getenv('MISTRAL_API_KEY')
+            if not api_key:
+                raise ValueError("No Mistral API key configured")
             
-            messages = [
-                ChatMessage(role="system", content=system_prompt),
-                ChatMessage(role="user", content=user_prompt)
-            ]
+            url = "https://api.mistral.ai/v1/chat/completions"
+            headers = {
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {api_key}",
+                "Accept": "application/json"
+            }
             
-            response = client.chat(
-                model=self.model,
-                messages=messages,
-                temperature=self.temperature,
-                max_tokens=self.max_tokens
-            )
+            # Use mistral-medium-latest as it's available for this API key scope
+            model = "mistral-medium-latest" if self.model == "mistral-large-latest" else self.model
             
-            return response.choices[0].message.content
+            data = {
+                "model": model,
+                "messages": [
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": user_prompt}
+                ],
+                "temperature": self.temperature,
+                "max_tokens": self.max_tokens
+            }
+            
+            # Increased timeout for slow API responses (5 minutes)
+            timeout = httpx.Timeout(300.0)
+            response = httpx.post(url, headers=headers, json=data, timeout=timeout)
+            response.raise_for_status()
+            
+            result = response.json()
+            print(f"DEBUG: LLM Response keys: {list(result.keys())}")
+            print(f"DEBUG: Choices: {result.get('choices', [])}")
+            return result['choices'][0]['message']['content']
             
         except ImportError:
-            # Fallback to simulation for development
-            print("⚠️  Mistral client not available, using simulation mode")
-            return self._simulate_llm_response(user_prompt)
+            print("⚠️  httpx not available, installing...")
+            import subprocess
+            subprocess.check_call(["pip3", "install", "httpx", "--break-system-packages"])
+            import httpx
+            return self._call_llm(system_prompt, user_prompt)
+        except httpx.HTTPStatusError as e:
+            if e.response.status_code == 429:  # Rate limited
+                print("⚠️  Mistral API rate limited - waiting and retrying...")
+                time.sleep(60)  # Wait 1 minute
+                return self._call_llm(system_prompt, user_prompt)
+            else:
+                print(f"❌ Mistral API HTTP error {e.response.status_code}: {e}")
+                print("⚠️  Falling back to simulation mode")
+                return self._simulate_llm_response(user_prompt)
         except Exception as e:
             print(f"❌ Mistral API error: {e}")
+            print("⚠️  Falling back to simulation mode")
             return self._simulate_llm_response(user_prompt)
 
     def _simulate_llm_response(self, user_prompt: str) -> str:
@@ -156,7 +196,7 @@ Generate the complete SKILL.md file:"""
         # Extract basic information from prompt
         command_name = "research-phase"  # Default for simulation
         
-        # Simulate a basic skill structure
+        # Simulate a basic skill structure (no markdown code fences!)
         return f"""---
 name: {command_name}
 description: Research how to implement a phase
@@ -271,12 +311,32 @@ Output: RESEARCH.md with feasibility assessment, recommended stack, and implemen
             if "---" not in response:
                 raise ValueError("LLM response missing YAML frontmatter")
             
+            # Clean up any accidental markdown code fences
+            response = self._clean_response(response)
+            
             return response
             
         except Exception as e:
             print(f"❌ LLM migration failed: {e}")
             # Fallback to basic template
             return self._create_fallback_skill(prompt_context)
+    
+    def _clean_response(self, response: str) -> str:
+        """Clean up response by removing markdown code fences"""
+        # Remove opening markdown code fence if present
+        if response.startswith('```markdown'):
+            response = response[11:].lstrip()
+        elif response.startswith('```'):
+            # Handle generic markdown fence
+            lines = response.split('\n')
+            if len(lines) > 1 and lines[1].strip() == '---':
+                response = '\n'.join(lines[1:])
+        
+        # Remove closing markdown code fence if present
+        if response.rstrip().endswith('```'):
+            response = response.rstrip()[:-3].rstrip()
+        
+        return response
 
     def _create_fallback_skill(self, context: Dict) -> str:
         """Create basic skill template as fallback"""
