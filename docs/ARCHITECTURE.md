@@ -116,6 +116,7 @@ User-facing entry points. Each file contains YAML frontmatter (name, description
 - **Codex:** Skills (`$gsd-command-name`)
 - **Copilot:** Slash commands (`/gsd-command-name`)
 - **Antigravity:** Skills
+- **Mistral Vibe:** Natural language or explicit tool call (`skill(name="gsd-command-name")` or `vibe -p "gsd-command-name"`)
 
 **Total commands:** see [`docs/INVENTORY.md`](INVENTORY.md#commands) for the authoritative count and full roster.
 

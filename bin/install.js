@@ -95,6 +95,7 @@ const hasTrae = args.includes('--trae');
 const hasQwen = args.includes('--qwen');
 const hasCodebuddy = args.includes('--codebuddy');
 const hasCline = args.includes('--cline');
+const hasVibe = args.includes('--vibe');
 const hasBoth = args.includes('--both'); // Legacy flag, keeps working
 const hasAll = args.includes('--all');
 const hasUninstall = args.includes('--uninstall') || args.includes('-u');
@@ -113,7 +114,7 @@ if (hasSdk && hasNoSdk) {
 // Runtime selection - can be set by flags or interactive prompt
 let selectedRuntimes = [];
 if (hasAll) {
-  selectedRuntimes = ['claude', 'kilo', 'opencode', 'gemini', 'codex', 'copilot', 'antigravity', 'cursor', 'windsurf', 'augment', 'trae', 'qwen', 'codebuddy', 'cline'];
+  selectedRuntimes = ['claude', 'kilo', 'opencode', 'gemini', 'codex', 'copilot', 'antigravity', 'cursor', 'windsurf', 'augment', 'trae', 'qwen', 'codebuddy', 'cline', 'vibe'];
 } else if (hasBoth) {
   selectedRuntimes = ['claude', 'opencode'];
 } else {
@@ -131,6 +132,7 @@ if (hasAll) {
   if (hasQwen) selectedRuntimes.push('qwen');
   if (hasCodebuddy) selectedRuntimes.push('codebuddy');
   if (hasCline) selectedRuntimes.push('cline');
+  if (hasVibe) selectedRuntimes.push('vibe');
 }
 
 // WSL + Windows Node.js detection
@@ -182,6 +184,7 @@ function getDirName(runtime) {
   if (runtime === 'qwen') return '.qwen';
   if (runtime === 'codebuddy') return '.codebuddy';
   if (runtime === 'cline') return '.cline';
+  if (runtime === 'vibe') return '.vibe';
   return '.claude';
 }
 
@@ -217,6 +220,7 @@ function getConfigDirFromHome(runtime, isGlobal) {
   if (runtime === 'qwen') return "'.qwen'";
   if (runtime === 'codebuddy') return "'.codebuddy'";
   if (runtime === 'cline') return "'.cline'";
+  if (runtime === 'vibe') return "'.vibe'";
   return "'.claude'";
 }
 
@@ -405,10 +409,21 @@ function getGlobalDir(runtime, explicitDir = null) {
     if (explicitDir) {
       return expandTilde(explicitDir);
     }
-    if (process.env.CLINE_CONFIG_DIR) {
+    if (process.env.CLINE.Config_DIR) {
       return expandTilde(process.env.CLINE_CONFIG_DIR);
     }
     return path.join(os.homedir(), '.cline');
+  }
+
+  if (runtime === 'vibe') {
+    // Vibe: --config-dir > VIBE_CONFIG_DIR > ~/.vibe
+    if (explicitDir) {
+      return expandTilde(explicitDir);
+    }
+    if (process.env.VIBE_CONFIG_DIR) {
+      return expandTilde(process.env.VIBE_CONFIG_DIR);
+    }
+    return path.join(os.homedir(), '.vibe');
   }
 
   // Claude Code: --config-dir > CLAUDE_CONFIG_DIR > ~/.claude
@@ -5147,6 +5162,70 @@ function copyCommandsAsClaudeSkills(srcDir, skillsDir, prefix, pathPrefix, runti
  * @param {string} prefix - Skill name prefix (e.g. 'gsd')
  * @param {boolean} isGlobal - Whether this is a global install
  */
+function copyCommandsAsVibeSkills(srcDir, skillsDir, prefix, pathPrefix, runtime, isGlobal = false) {
+  if (!fs.existsSync(srcDir)) {
+    return;
+  }
+
+  fs.mkdirSync(skillsDir, { recursive: true });
+
+  // Remove previous GSD Vibe skills to avoid stale command skills
+  const existing = fs.readdirSync(skillsDir, { withFileTypes: true });
+  for (const entry of existing) {
+    if (entry.isDirectory() && entry.name.startsWith(`${prefix}-`)) {
+      fs.rmSync(path.join(skillsDir, entry.name), { recursive: true });
+    }
+  }
+
+  function recurse(currentSrcDir, currentPrefix) {
+    const entries = fs.readdirSync(currentSrcDir, { withFileTypes: true });
+
+    for (const entry of entries) {
+      const srcPath = path.join(currentSrcDir, entry.name);
+      if (entry.isDirectory()) {
+        recurse(srcPath, `${currentPrefix}-${entry.name}`);
+        continue;
+      }
+
+      if (!entry.name.endsWith('.md')) {
+        continue;
+      }
+
+      const baseName = entry.name.replace('.md', '');
+      const skillName = `${currentPrefix}-${baseName}`;
+      const skillDir = path.join(skillsDir, skillName);
+      fs.mkdirSync(skillDir, { recursive: true });
+
+      let content = fs.readFileSync(srcPath, 'utf8');
+      // Replace path references for Vibe
+      content = content.replace(/~\/\.claude\//g, pathPrefix);
+      content = content.replace(/\$HOME\/\.claude\//g, pathPrefix);
+      content = content.replace(/\.\/\.claude\//g, `./${getDirName(runtime)}/`);
+      content = content.replace(/~\/\.qwen\//g, pathPrefix);
+      content = content.replace(/\$HOME\/\.qwen\//g, pathPrefix);
+      content = content.replace(/\.\/\.qwen\//g, `./${getDirName(runtime)}/`);
+      content = processAttribution(content, getCommitAttribution(runtime));
+      // For Vibe, convert slash commands to vibe -p format
+      content = content.replace(/\/gsd:([a-z0-9-]+)/g, 'vibe -p "gsd-$1"');
+      // Fix compatibility field
+      content = content.replace(/compatibility:\s*Python\s*3\.12\+/g, 'compatibility: Mistral Vibe');
+
+      fs.writeFileSync(path.join(skillDir, 'SKILL.md'), content);
+    }
+  }
+
+  recurse(srcDir, prefix);
+}
+
+/**
+ * Recursively install GSD commands as Antigravity skills.
+ * Each command becomes a skill-name/ folder containing SKILL.md.
+ * Mirrors copyCommandsAsCopilotSkills but uses Antigravity converters.
+ * @param {string} srcDir - Source commands directory
+ * @param {string} skillsDir - Target skills directory
+ * @param {string} prefix - Skill name prefix (e.g. 'gsd')
+ * @param {boolean} isGlobal - Whether this is a global install
+ */
 function copyCommandsAsAntigravitySkills(srcDir, skillsDir, prefix, isGlobal = false) {
   if (!fs.existsSync(srcDir)) {
     return;
@@ -6570,6 +6649,7 @@ function install(isGlobal, runtime = 'claude') {
   const isQwen = runtime === 'qwen';
   const isCodebuddy = runtime === 'codebuddy';
   const isCline = runtime === 'cline';
+  const isVibe = runtime === 'vibe';
   const dirName = getDirName(runtime);
   const src = path.join(__dirname, '..');
 
@@ -6620,6 +6700,7 @@ function install(isGlobal, runtime = 'claude') {
   if (isQwen) runtimeLabel = 'Qwen Code';
   if (isCodebuddy) runtimeLabel = 'CodeBuddy';
   if (isCline) runtimeLabel = 'Cline';
+  if (isVibe) runtimeLabel = 'Mistral Vibe';
 
   console.log(`  Installing for ${cyan}${runtimeLabel}${reset} to ${cyan}${locationLabel}${reset}\n`);
 
@@ -6774,6 +6855,22 @@ function install(isGlobal, runtime = 'claude') {
       console.log(`  ${green}✓${reset} Installed commands/gsd`);
     } else {
       failures.push('commands/gsd');
+    }
+  } else if (isVibe) {
+    // Mistral Vibe: skills/ format in ~/.vibe/
+    const skillsDir = path.join(targetDir, 'skills');
+    const gsdSrc = stageSkillsForMode(path.join(src, 'commands', 'gsd'), installMode);
+    copyCommandsAsVibeSkills(gsdSrc, skillsDir, 'gsd', pathPrefix, runtime, isGlobal);
+    if (fs.existsSync(skillsDir)) {
+      const count = fs.readdirSync(skillsDir, { withFileTypes: true })
+        .filter(e => e.isDirectory() && e.name.startsWith('gsd-')).length;
+      if (count > 0) {
+        console.log(`  ${green}✓${reset} Installed ${count} skills to skills/`);
+      } else {
+        failures.push('skills/gsd-*');
+      }
+    } else {
+      failures.push('skills/gsd-*');
     }
   } else if (isGlobal) {
     // Claude Code global: skills/ format (2.1.88+ compatibility)

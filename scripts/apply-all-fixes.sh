@@ -1,33 +1,32 @@
 #!/bin/bash
-# Wendet alle Fixes auf die Source-Dateien an und kopiert sie nach ~/.vibe/skills/
+# Applies all fixes to source files and copies them to ~/.vibe/skills/
 
 set -e
 
 echo "🔧 Applying all fixes to GSD Skills..."
 echo ""
 
-# 1. Process-Blöcke mit richtigen Anweisungen
-node scripts/fix-process-blocks-proper.js
-
-# 2. Compatibility fixen
-echo ""
-node scripts/fix-compatibility.js
-
-# 3. Slash Commands fixen
-echo ""
-node scripts/fix-slash-commands.js
-
-# 4. Gebrochene Slash Commands in Source fixen
-echo ""
+# 1. Fix broken slash commands in source
+echo "🔧 Fixing broken slash commands in source..."
 cd "$(dirname "$0")/.."
-node scripts/fix-broken-slash-commands-source.js
+node scripts/vibe/fix-skills.js
 
-# 5. Validierung
+# 2. Fix compatibility
+echo ""
+echo "🔧 Fixing compatibility..."
+node scripts/vibe/fix-compatibility.js
+
+# 3. Fix slash commands (legacy - handles other patterns)
+echo ""
+echo "🔧 Fixing slash commands..."
+node scripts/vibe/fix-slash-commands.js
+
+# 4. Validation
 echo ""
 echo "✅ Running validation..."
-node scripts/validate-vibe-skills.js
+node scripts/vibe/validate-skills.js
 
-# 6. Nach ~/.vibe/skills/ kopieren
+# 5. Copy to ~/.vibe/skills/
 echo ""
 echo "📦 Copying to ~/.vibe/skills/..."
 mkdir -p ~/.vibe/skills
