@@ -5210,6 +5210,13 @@ function copyCommandsAsVibeSkills(srcDir, skillsDir, prefix, pathPrefix, runtime
       // Fix compatibility field
       content = content.replace(/compatibility:\s*Python\s*3\.12\+/g, 'compatibility: Mistral Vibe');
 
+      // For Vibe, ensure Task() calls use write-capable agent (fixes read-only deadlock)
+      // Only add agent="default" if not already specified
+      content = content.replace(
+        /Task\((?!.*agent\s*=[^)]*\s*)/g,
+        'Task(agent="default", '
+      );
+
       fs.writeFileSync(path.join(skillDir, 'SKILL.md'), content);
     }
   }
